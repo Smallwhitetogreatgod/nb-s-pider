@@ -37,7 +37,7 @@ public class YOUKUProcessService implements IProcessService {
 		page.setSupportnumber(supportNumber);	
 //		System.out.println("播放量： "+allNumber +"\n"
 //				           +"评论数："+commentNumber +"\n"
-//				           +"顶："+supportNumber);
+//				              +"顶："+supportNumber);
  
  
 	}
