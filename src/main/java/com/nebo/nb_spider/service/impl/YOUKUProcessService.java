@@ -35,6 +35,7 @@ public class YOUKUProcessService implements IProcessService {
 	    //获取赞
 	    String supportNumber = HtmlUtil.getFiledByRegex(rootNode, LoadPropertyUtil.getYOUKU("parseSupportNumber"), LoadPropertyUtil.getYOUKU("supportRegex"));
 		page.setSupportnumber(supportNumber);	
+		
 //		System.out.println("播放量： "+allNumber +"\n"
 //				           +"评论数："+commentNumber +"\n"
 //				              +"顶："+supportNumber);
