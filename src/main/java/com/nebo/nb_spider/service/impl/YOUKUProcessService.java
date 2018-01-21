@@ -3,6 +3,7 @@ package com.nebo.nb_spider.service.impl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
@@ -27,13 +28,19 @@ public class YOUKUProcessService implements IProcessService {
 		TagNode rootNode = htmlCleaner.clean(content);
 
 		if (page.getUrl().startsWith("http://list.youku.com/show/")) {
-			// 解析电视剧详情页
+			// 
+			 System.out.println("解析电视剧详情页"  );
+
 			parseDetail(page, rootNode);
 
 		} else {
-			System.out.println(page.getContent());
+			 System.out.println("解析电视剧列表页"  );
 			String nextUrl = HtmlUtil.getAttributeByName(rootNode, LoadPropertyUtil.getYOUKU("nextUrlRegex"), "href");
 			if (nextUrl != null) {
+				// 获取到了节目页，但是还需要获取节目简介。
+				if (!nextUrl.startsWith("http")) {
+					nextUrl = "http:" + nextUrl;
+				}
 				page.addUrl(nextUrl);
 			}
 			System.out.println("urlList=" + nextUrl);
@@ -46,15 +53,27 @@ public class YOUKUProcessService implements IProcessService {
 						TagNode tagNode = (TagNode) object;
 						String detailUrl = tagNode.getAttributeByName("href");
 						// 获取到了节目页，但是还需要获取节目简介。
-						if(! detailUrl.startsWith("http")){
-							detailUrl ="http:"+detailUrl;
+						if (!StringUtils.isBlank(detailUrl)) {
+
+							if (!detailUrl.startsWith("http")) {
+								detailUrl = "http:" + detailUrl;
+							}
+
+							//System.out.println("detailUrl=" + detailUrl);
+							String descUrl = HtmlUtil.getDescUrl(detailUrl,
+									LoadPropertyUtil.getYOUKU("eachDescUrlRegex"));
+							if (!StringUtils.isBlank(descUrl)) {
+								if (!descUrl.startsWith("http")) {
+									descUrl = "http:" + descUrl;
+								}
+								
+							} else {
+								descUrl = detailUrl;
+							}
+							page.addUrl(descUrl);
+						//	System.out.println("descUrl=" + descUrl);
+
 						}
-						String descUrl = HtmlUtil.getDescUrl(detailUrl, LoadPropertyUtil.getYOUKU("eachDescUrlRegex"));
-						if(! descUrl.startsWith("http")){
-							descUrl ="http:"+descUrl;
-						}
-						page.addUrl(descUrl);
-						System.out.println("detailUrl=" + descUrl);
 
 					}
 

@@ -71,7 +71,7 @@ public class HbaseUtil {
 	public HbaseUtil() {
 		conf = new Configuration();
 		conf.set("hbase.zookeeper.quorum", "192.168.20.129:2181");
-		conf.set("hbase.rootdir", "hdfs://192.168.20.129:9000/hbase");
+		conf.set("hbase.rootdir", "hdfs://192.168.126.125:9000/hbase");
 		try {
 			admin = new HBaseAdmin(conf);
 		} catch (IOException e) {

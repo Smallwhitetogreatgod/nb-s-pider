@@ -32,7 +32,7 @@ public class PageDownLoadUtil {
 		try {
 			request.setHeader("User-Agent",USER_AGENT);
 		 
-			System.out.println(request.toString());
+		
 			CloseableHttpResponse response = client.execute(request);
 			HttpEntity entity = response.getEntity();
 			content = EntityUtils.toString(entity);
