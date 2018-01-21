@@ -10,6 +10,7 @@ import com.nebo.nb_spider.service.IStoreService;
 public class ConsoleStoreService implements IStoreService {
 
 	public void store(Page page) {
+		System.out.println("tvId="+page.getTvId());
 		System.out.println("allnumber="+page.getAllnumber());
 		System.out.println("commentnumber="+page.getCommentnumber());
 		System.out.println("supportnumber="+page.getSupportnumber());

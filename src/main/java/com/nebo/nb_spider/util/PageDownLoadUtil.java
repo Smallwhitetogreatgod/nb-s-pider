@@ -20,13 +20,19 @@ import com.nebo.nb_spider.service.impl.HttpClientDownLoadService;
  * create by 
  */
 public class PageDownLoadUtil {
+	private final static String USER_AGENT =
+			"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.61 Safari/537.36";
+
 	public static String getPageContent(String url){
-		HttpClientBuilder  builder= HttpClients.custom();
+			HttpClientBuilder  builder= HttpClients.custom();
 		CloseableHttpClient client=builder.build();
 		
 		HttpGet request = new HttpGet(url);
 		String content = null;
 		try {
+			request.setHeader("User-Agent",USER_AGENT);
+		 
+			System.out.println(request.toString());
 			CloseableHttpResponse response = client.execute(request);
 			HttpEntity entity = response.getEntity();
 			content = EntityUtils.toString(entity);

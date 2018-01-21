@@ -17,7 +17,7 @@ public class StartDSJCount {
 	private IDownLoadService downLoadService;
 	private IProcessService processService;
 	private IStoreService   storeService;
-	
+	//private ExecutorService 
 	public IProcessService getProcessService() {
 		return processService;
 	}
@@ -30,8 +30,8 @@ public class StartDSJCount {
 		dsj.setProcessService(new YOUKUProcessService());
 		dsj.setStoreService(new ConsoleStoreService());
 		
-		String url="http://list.youku.com/show/id_zefbfbdefbfbdefbfbd68.html?spm=a2h0j.8191423.module_basic_title.5~A!2";
-
+		//String url="http://list.youku.com/show/id_zefbfbdefbfbdefbfbd68.html?spm=a2h0j.8191423.module_basic_title.5~A!2";
+		String url ="http://list.youku.com/category/show/c_97.html?spm=a2htv.20009910.nav-second.5~1~3!12~A";	
 		//下载页面
 		Page page = dsj.downloadPage(url);
 		

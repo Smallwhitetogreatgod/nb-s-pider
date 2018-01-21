@@ -13,6 +13,7 @@ public class HttpClientDownLoadService  implements IDownLoadService{
 	public Page downLoad(String url) {
 		Page page =new Page();
 		page.setContent(PageDownLoadUtil.getPageContent(url));
+		page.setUrl(url);
 		return page;
 	}
 

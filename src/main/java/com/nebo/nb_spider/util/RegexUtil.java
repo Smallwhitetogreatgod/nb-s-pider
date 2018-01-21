@@ -13,7 +13,13 @@ public class RegexUtil {
 	public static String getPageInfoByRegex(String content,Pattern pattern ,int groupNo){
 		Matcher matcher = pattern.matcher(content);
 		if (matcher.find()){
-			return matcher.group(0).trim();
+			int i = matcher.groupCount();
+			System.out.println(i);
+			for(int j = 0;j<=i;j++){
+				System.out.println(j);
+				System.out.println(matcher.group(j).trim());
+			}
+			return matcher.group(groupNo).trim();
 		}
 		return "0";
 		
