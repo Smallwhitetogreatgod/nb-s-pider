@@ -24,5 +24,21 @@ public class LoadPropertyUtil {
 		}
 		return value;
 	}
+	//读取公共配置文件
+ 	public static String getConfig(String key){
+		String value="";
+		Locale locale=Locale.getDefault();
+		try{
+			ResourceBundle localResource=ResourceBundle.getBundle("config", locale);
+			value=localResource.getString(key);
+			
+		}catch(MissingFormatArgumentException e){
+			value="";
+		}
+		return value;
+	}
+ 	public static void main(String[] args) {
+		System.out.println(getConfig("threadNum"));
+	}
 
 }
