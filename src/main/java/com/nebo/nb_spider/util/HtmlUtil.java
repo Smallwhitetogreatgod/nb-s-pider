@@ -27,7 +27,7 @@ public class HtmlUtil {
 		Object[] evaluateXPath;
 		try {
 			evaluateXPath = rootNode.evaluateXPath(xpath);
-			System.out.println(xpath);
+			//System.out.println(xpath);
 			if (evaluateXPath.length > 0) {
 				TagNode node = (TagNode) evaluateXPath[0];
 				result = node.getAttributeByName(att);
@@ -53,8 +53,10 @@ public class HtmlUtil {
 			evaluateXPath = rootNode.evaluateXPath(xpath);
 			if (evaluateXPath.length > 0) {
 				TagNode node = (TagNode) evaluateXPath[0];
+				 System.out.println();
 				Pattern numberPattern = Pattern.compile(regex, Pattern.DOTALL);
 				number = RegexUtil.getPageInfoByRegex(node.getText().toString(), numberPattern, 0);
+				//System.out.println("number================="+number);
 
 			}
 

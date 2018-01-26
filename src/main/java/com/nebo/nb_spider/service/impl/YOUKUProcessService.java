@@ -28,13 +28,13 @@ public class YOUKUProcessService implements IProcessService {
 		TagNode rootNode = htmlCleaner.clean(content);
 
 		if (page.getUrl().startsWith("http://list.youku.com/show/")) {
-			// 
-			 System.out.println("解析电视剧详情页"  );
+			//
+			System.out.println("解析电视剧详情页");
 
 			parseDetail(page, rootNode);
 
 		} else {
-			 System.out.println("解析电视剧列表页"  );
+			System.out.println("解析电视剧列表页");
 			String nextUrl = HtmlUtil.getAttributeByName(rootNode, LoadPropertyUtil.getYOUKU("nextUrlRegex"), "href");
 			if (nextUrl != null) {
 				// 获取到了节目页，但是还需要获取节目简介。
@@ -43,7 +43,7 @@ public class YOUKUProcessService implements IProcessService {
 				}
 				page.addUrl(nextUrl);
 			}
-			System.out.println("urlList=" + nextUrl);
+			// System.out.println("urlList=" + nextUrl);
 			// 获取详情页url
 			try {
 
@@ -51,7 +51,15 @@ public class YOUKUProcessService implements IProcessService {
 				if (evaluateXPath.length > 0) {
 					for (Object object : evaluateXPath) {
 						TagNode tagNode = (TagNode) object;
-						String detailUrl = tagNode.getAttributeByName("href");
+
+						// 获取节目增量
+						String daynumber = HtmlUtil
+								.getFiledByRegex(tagNode, LoadPropertyUtil.getYOUKU("eachDetailUrlRegex_zl"),
+										LoadPropertyUtil.getYOUKU("commonRegex"))
+								.replace("播放", "");
+						String detailUrl = HtmlUtil.getAttributeByName(tagNode,
+								LoadPropertyUtil.getYOUKU("eachDetailUrlRegex_a"), "href");
+
 						// 获取到了节目页，但是还需要获取节目简介。
 						if (!StringUtils.isBlank(detailUrl)) {
 
@@ -59,19 +67,19 @@ public class YOUKUProcessService implements IProcessService {
 								detailUrl = "http:" + detailUrl;
 							}
 
-							//System.out.println("detailUrl=" + detailUrl);
-							String descUrl = HtmlUtil.getDescUrl(detailUrl,
-									LoadPropertyUtil.getYOUKU("eachDescUrlRegex"));
+							// System.out.println("detailUrl=" + detailUrl);
+							String descUrl = HtmlUtil.getDescUrl(detailUrl,	LoadPropertyUtil.getYOUKU("eachDescUrlRegex"));
 							if (!StringUtils.isBlank(descUrl)) {
 								if (!descUrl.startsWith("http")) {
 									descUrl = "http:" + descUrl;
 								}
-								
+
 							} else {
 								descUrl = detailUrl;
 							}
-							page.addUrl(descUrl);
-						//	System.out.println("descUrl=" + descUrl);
+							// 将daynumber放入。daynummber为 xxxx万次 xxx次 。会不会产生乱码。
+							page.addUrl(descUrl + "@" + daynumber);
+							// System.out.println("descUrl=" + descUrl);
 
 						}
 
@@ -79,8 +87,7 @@ public class YOUKUProcessService implements IProcessService {
 
 				}
 			} catch (XPatherException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+ 				e.printStackTrace();
 			}
 		}
 
@@ -105,6 +112,13 @@ public class YOUKUProcessService implements IProcessService {
 		String supportNumber = HtmlUtil.getFiledByRegex(rootNode, LoadPropertyUtil.getYOUKU("parseSupportNumber"),
 				LoadPropertyUtil.getYOUKU("supportRegex"));
 		page.setSupportnumber(supportNumber);
+
+		// 获取TVname
+		String tvNames = HtmlUtil.getFiledByRegex(rootNode, LoadPropertyUtil.getYOUKU("parseTvName"),
+
+				LoadPropertyUtil.getYOUKU("commonRegex"));
+
+		page.setTvname(tvNames);
 
 		// 获取优酷电视剧id
 		Pattern pattern = Pattern.compile(LoadPropertyUtil.getYOUKU("idRegex"), Pattern.DOTALL);

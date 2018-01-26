@@ -17,6 +17,7 @@ public class RedisUtil {
 	//redis中列表key的名称
 	public static String highkey = "spider.highlevel";
 	public static String lowkey = "spider.lowlevel";
+	public static String starturl="start.url";
 	
 	
 	JedisPool jedisPool = null;
@@ -26,7 +27,7 @@ public class RedisUtil {
 		poolConfig.setMaxTotal(100);
 		poolConfig.setMaxWaitMillis(10000);
 		poolConfig.setTestOnBorrow(true);
-		jedisPool = new JedisPool(poolConfig, "192.168.20.129", 6379);
+		jedisPool = new JedisPool(poolConfig, "192.168.126.125", 6379);
 	}
 	
 	/**
@@ -71,7 +72,8 @@ public class RedisUtil {
 	public static void main(String[] args) {
 		RedisUtil redisUtil = new RedisUtil();
 		String url = "http://list.youku.com/category/show/c_97.html?spm=a2htv.20009910.nav-second.5~1~3!12~A";
-		redisUtil.add(highkey, url);
+		redisUtil.add(starturl, url);
+		 
 	}
 	
 }

@@ -21,14 +21,16 @@ public class RedisRepositoryService implements IRepositoryService {
 		}
 		return url;
 	}
-
+	public void addLowLevel(String url) {
+		System.out.println(url+"addlowkey==================");
+		redisUtil.add(RedisUtil.lowkey,url);
+	}
+ 
 	public void addHighLevel(String url) {
+		
 		redisUtil.add(RedisUtil.highkey,url);
 
 	}
 
-	public void addLowLevel(String url) {
-		redisUtil.add(RedisUtil.lowkey,url);
-	}
- 
+	
 }

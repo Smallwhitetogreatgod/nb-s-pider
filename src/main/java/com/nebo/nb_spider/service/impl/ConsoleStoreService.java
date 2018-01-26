@@ -14,6 +14,8 @@ public class ConsoleStoreService implements IStoreService {
 		System.out.println("allnumber="+page.getAllnumber());
 		System.out.println("commentnumber="+page.getCommentnumber());
 		System.out.println("supportnumber="+page.getSupportnumber());
+		System.out.println("daynumber="+page.getDaynumber());
+		System.out.println("TVnAME==="+page.getTvname());
 	}
 
 }
