@@ -12,6 +12,7 @@ import com.nebo.nb_spider.service.IProcessService;
 import com.nebo.nb_spider.service.IRepositoryService;
 import com.nebo.nb_spider.service.IStoreService;
 import com.nebo.nb_spider.service.impl.ConsoleStoreService;
+import com.nebo.nb_spider.service.impl.HBaseStoreService;
 import com.nebo.nb_spider.service.impl.HttpClientDownLoadService;
 import com.nebo.nb_spider.service.impl.QueueRepositoryService;
 import com.nebo.nb_spider.service.impl.RedisRepositoryService;
@@ -40,15 +41,17 @@ public class StartDSJCount {
 		StartDSJCount dsj = new StartDSJCount();
 		dsj.setDownLoadService(new HttpClientDownLoadService());
 		dsj.setProcessService(new YOUKUProcessService());
-		dsj.setStoreService(new ConsoleStoreService());
-		dsj.setRepositoryService(new RedisRepositoryService());
+		//dsj.setStoreService(new ConsoleStoreService());
+		dsj.setStoreService(new HBaseStoreService());
+		 
+		dsj.setRepositoryService(new QueueRepositoryService());
 
 		// String
 		// url="http://list.youku.com/show/id_zefbfbdefbfbdefbfbd68.html?spm=a2h0j.8191423.module_basic_title.5~A!2";
-		//String url = "http://list.youku.com/category/show/c_97.html?spm=a2htv.20009910.nav-second.5~1~3!12~A";
+		String url = "http://list.youku.com/category/show/c_97.html?spm=a2htv.20009910.nav-second.5~1~3!12~A";
 
 		// 设置起始url
-		//dsj.repositoryService.addHighLevel(url);
+		dsj.repositoryService.addHighLevel(url);
 		// 开启爬虫
 		dsj.startSpider();
 
@@ -69,12 +72,13 @@ public class StartDSJCount {
 
 					public void run() {
 						String[] descUrl = url.split("@");
+						System.out.println("downloadPage_url"+descUrl[0]);
 						Page page = StartDSJCount.this.downloadPage(descUrl[0]);
 						if(descUrl.length==2){
-							page.setDaynumber(descUrl[1]);
-							
+							page.setDaynumber(descUrl[1]);		
+							System.out.println(descUrl[1]+"=====descUrl=============<");
 						}
-						System.out.println(descUrl+"=====descUrl=============<");
+						
 						StartDSJCount.this.processPage(page);
 						List<String> urlList = page.getUrlList();
 						for (String eachUrl : urlList) {
@@ -82,21 +86,19 @@ public class StartDSJCount {
 							if (eachUrl.startsWith("http://list.youku.com/category/show/")) {
 								StartDSJCount.this.repositoryService.addHighLevel(eachUrl);
 							} else {
-								System.out.println("before add"+eachUrl);
+							 
 								StartDSJCount.this.repositoryService.addLowLevel(eachUrl);
-								System.out.println("after  add"+eachUrl);
+								 
 							}
 						}
-						if (page.getUrl().startsWith("http://list.youku.com/show/")) {
-							
+						if (page.getUrl().startsWith("http://list.youku.com/show/")) {							
 							// 存储数据
+							System.out.println("Store==========");
 							StartDSJCount.this.storePageInfo(page);
 						}
 						ThreadUtil.sleep(Long.parseLong(LoadPropertyUtil.getConfig("sleep_millions")));
-
 					}
 				});
-
 			} else {
 				System.out.println("队列中的电视剧url解析完毕！ 请等待 ");
 				ThreadUtil.sleep(Long.parseLong(LoadPropertyUtil.getConfig("sleep_millions_5")));

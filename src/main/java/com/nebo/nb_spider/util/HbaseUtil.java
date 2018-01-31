@@ -29,7 +29,7 @@ import com.nebo.nb_spider.entity.Page;
 
 /**
  * HBase 工具类 
- * Created by dajiangtai on 2016-10-04
+ * Created by nebo on 2018-01-29
  */
 public class HbaseUtil {
 
@@ -69,14 +69,18 @@ public class HbaseUtil {
 	 * 构造函数加载配置
 	 */
 	public HbaseUtil() {
+	    
 		conf = new Configuration();
-		conf.set("hbase.zookeeper.quorum", "192.168.20.129:2181");
-		conf.set("hbase.rootdir", "hdfs://192.168.126.125:9000/hbase");
+		conf.set("hbase.zookeeper.quorum", "192.168.126.121:2181,192.168.126.122:2181,192.168.126.123:2181,192.168.126.124:2181,192.168.126.125:2181");
+	 	// conf.set("hbase.rootdir", "hdfs://192.168.126.121:9000/hbase");
 		try {
 			admin = new HBaseAdmin(conf);
-		} catch (IOException e) {
+			
+		 
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -221,9 +225,13 @@ public class HbaseUtil {
 	 * @throws Exception
 	 */
 	public List<String> getALLTable() throws Exception {
+		System.out.println("==");
 		ArrayList<String> tables = new ArrayList<String>();
+		System.out.println(admin);
 		if (admin != null) {
+		   System.out.println("============");
 			HTableDescriptor[] listTables = admin.listTables();
+			System.out.println(listTables.length);
 			if (listTables.length > 0) {
 				for (HTableDescriptor tableDesc : listTables) {
 					tables.add(tableDesc.getNameAsString());

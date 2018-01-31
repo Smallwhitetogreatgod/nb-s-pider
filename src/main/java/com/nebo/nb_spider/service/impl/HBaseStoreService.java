@@ -12,10 +12,25 @@ import com.nebo.nb_spider.util.HbaseUtil;
  */
 public class HBaseStoreService implements IStoreService {
 	HbaseUtil hbaseUtil = new HbaseUtil();
+	public static void main(String[] args) {
+		Page page=new Page();
+		page.setAgainstnumber("1");
+		page.setAllnumber("1");
+		page.setCollectnumber("1");
+		page.setCommentnumber("1");
+		page.setContent("11");
+		page.setDaynumber("0");
+		page.setSupportnumber("1");
+		page.setTvname("12");
+		HBaseStoreService hs =new HBaseStoreService();
+		hs.store(page);
+	}
 	public void store(Page page) {
 		// TODO Auto-generated method stub
 		String tvId = page.getTvId();
 		try {
+			System.out.println("调用put");
+			hbaseUtil.put(HbaseUtil.TABLE_NAME, tvId, HbaseUtil.COLUMNFAMILY_1, HbaseUtil.COLUMNFAMILY_1_TVNAME, page.getTvname());
 			hbaseUtil.put(HbaseUtil.TABLE_NAME, tvId, HbaseUtil.COLUMNFAMILY_1, HbaseUtil.COLUMNFAMILY_1_URL, page.getUrl());
 			hbaseUtil.put(HbaseUtil.TABLE_NAME, tvId, HbaseUtil.COLUMNFAMILY_1, HbaseUtil.COLUMNFAMILY_1_ALLNUMBER, page.getAllnumber());
 			hbaseUtil.put(HbaseUtil.TABLE_NAME, tvId, HbaseUtil.COLUMNFAMILY_1, HbaseUtil.COLUMNFAMILY_1_COMMENTNUMBER, page.getCommentnumber());
@@ -28,5 +43,7 @@ public class HBaseStoreService implements IStoreService {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 }

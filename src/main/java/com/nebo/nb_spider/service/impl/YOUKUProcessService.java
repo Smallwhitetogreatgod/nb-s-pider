@@ -103,22 +103,29 @@ public class YOUKUProcessService implements IProcessService {
 		// 获取播放量
 		String allNumber = HtmlUtil.getFiledByRegex(rootNode, LoadPropertyUtil.getYOUKU("parseAllNumber"),
 				LoadPropertyUtil.getYOUKU("allnumberRegex"));
-		page.setAllnumber(allNumber);
+		
 		// 获取评论数
 		String commentNumber = HtmlUtil.getFiledByRegex(rootNode, LoadPropertyUtil.getYOUKU("parseCommentNumber"),
 				LoadPropertyUtil.getYOUKU("commentRegex"));
-		page.setCommentnumber(commentNumber);
+		
 		// 获取赞
 		String supportNumber = HtmlUtil.getFiledByRegex(rootNode, LoadPropertyUtil.getYOUKU("parseSupportNumber"),
 				LoadPropertyUtil.getYOUKU("supportRegex"));
-		page.setSupportnumber(supportNumber);
+		
 
 		// 获取TVname
 		String tvNames = HtmlUtil.getFiledByRegex(rootNode, LoadPropertyUtil.getYOUKU("parseTvName"),
 
 				LoadPropertyUtil.getYOUKU("commonRegex"));
-
+		page.setAllnumber(allNumber);
+		page.setSupportnumber(supportNumber);
+		page.setCommentnumber(commentNumber);
 		page.setTvname(tvNames);
+		
+		//TODO:
+		page.setAgainstnumber("0");
+		page.setCollectnumber("0");
+		 
 
 		// 获取优酷电视剧id
 		Pattern pattern = Pattern.compile(LoadPropertyUtil.getYOUKU("idRegex"), Pattern.DOTALL);
