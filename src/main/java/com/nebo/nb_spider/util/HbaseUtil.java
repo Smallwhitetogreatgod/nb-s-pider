@@ -35,6 +35,7 @@ import com.nebo.nb_spider.entity.Page;
  */
 public class HbaseUtil {
 
+
 	/**
 	 * HBASE 表名称
 	 */
