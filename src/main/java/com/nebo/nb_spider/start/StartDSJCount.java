@@ -40,18 +40,15 @@ public class StartDSJCount {
 	public static void main(String[] args) {
 		StartDSJCount dsj = new StartDSJCount();
 		dsj.setDownLoadService(new HttpClientDownLoadService());
-		dsj.setProcessService(new YOUKUProcessService());
-		//dsj.setStoreService(new ConsoleStoreService());
-		dsj.setStoreService(new HBaseStoreService());
+		 dsj.setProcessService(new YOUKUProcessService());
+		 dsj.setStoreService(new ConsoleStoreService());
+		//  dsj.setStoreService(new HBaseStoreService());
 		 
-		dsj.setRepositoryService(new QueueRepositoryService());
-
-		// String
-		// url="http://list.youku.com/show/id_zefbfbdefbfbdefbfbd68.html?spm=a2h0j.8191423.module_basic_title.5~A!2";
-		String url = "http://list.youku.com/category/show/c_97.html?spm=a2htv.20009910.nav-second.5~1~3!12~A";
-
+	  	 dsj.setRepositoryService(new RedisRepositoryService());
+		//String  url="http://list.youku.com/category/show/c_97.html?spm=a2htv.20009910.nav-second.5~1~3!12~A";
+	   //	String url = "http://list.youku.com/category/show/c_97.html?spm=a2htv.20009910.nav-second.5~1~3!12~A";
 		// 设置起始url
-		dsj.repositoryService.addHighLevel(url);
+		// dsj.repositoryService.addHighLevel(url);
 		// 开启爬虫
 		dsj.startSpider();
 
@@ -64,39 +61,44 @@ public class StartDSJCount {
 		while (true) {
 			// 从队列中提取需要解析的url
 			final String url = repositoryService.poll();
-			System.out.println(url+"==================<");
+
 			// 判断url是否为空
 			if (StringUtils.isNotBlank(url)) {
 				// 下载
 				newFixedThreadPool.execute(new Runnable() {
 
 					public void run() {
+						//首先判断是剧集列表页。还是详情页
 						String[] descUrl = url.split("@");
 						System.out.println("downloadPage_url"+descUrl[0]);
 						Page page = StartDSJCount.this.downloadPage(descUrl[0]);
-						if(descUrl.length==2){
-							page.setDaynumber(descUrl[1]);		
+						if(descUrl.length==4){
+							page.setDaynumber(descUrl[2]);
+							page.setTvname(descUrl[1]);
+
+							page.setCurrentPageNum(descUrl[3]);
 							System.out.println(descUrl[1]+"=====descUrl=============<");
 						}
 						
 						StartDSJCount.this.processPage(page);
+
+
 						List<String> urlList = page.getUrlList();
 						for (String eachUrl : urlList) {
-							// this.urlQueue.add(eachUrl);
+							// 列表显示页;
 							if (eachUrl.startsWith("http://list.youku.com/category/show/")) {
 								StartDSJCount.this.repositoryService.addHighLevel(eachUrl);
 							} else {
-							 
 								StartDSJCount.this.repositoryService.addLowLevel(eachUrl);
-								 
 							}
 						}
 						if (page.getUrl().startsWith("http://list.youku.com/show/")) {							
 							// 存储数据
-							System.out.println("Store==========");
 							StartDSJCount.this.storePageInfo(page);
 						}
-						ThreadUtil.sleep(Long.parseLong(LoadPropertyUtil.getConfig("sleep_millions")));
+						//由固定的休眠时间。改为随机休眠时间
+						ThreadUtil.sleep((long) (Math.random()* Long.parseLong(LoadPropertyUtil.getConfig("sleep_millions5"))));
+
 					}
 				});
 			} else {
