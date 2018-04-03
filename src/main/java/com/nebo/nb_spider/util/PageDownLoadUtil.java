@@ -25,9 +25,22 @@ public class PageDownLoadUtil {
 			"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.61 Safari/537.36";
 
 	public static String getPageContent(String url){
-			HttpClientBuilder  builder= HttpClients.custom();
+		HttpClientBuilder  builder= HttpClients.custom();
 		CloseableHttpClient client=builder.build();
-		
+		/*
+		设置动态ip的代码
+		String ip_port=redisUtil.getSet("");
+		if(StringUtils.isNotBlank(ip_port)){
+			String[] arr=ip_port.split(":");
+			String proxy_ip=arr[0];
+			int proxy_port=Integer.parseInt(arr[1]);
+			//设置代理
+			HttpHost proxy=new HttpHost(proxy_ip,proxy_port);
+			client=builder.setProxy().build();
+			//其余代码不变
+		}
+
+		 */
 		HttpGet request = new HttpGet(url);
 		String content = null;
 		try {
@@ -38,10 +51,10 @@ public class PageDownLoadUtil {
 			HttpEntity entity = response.getEntity();
 			content = EntityUtils.toString(entity);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		return content ;
