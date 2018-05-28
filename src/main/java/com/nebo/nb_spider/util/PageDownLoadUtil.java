@@ -38,6 +38,7 @@ public class PageDownLoadUtil {
 			HttpHost proxy=new HttpHost(proxy_ip,proxy_port);
 			client=builder.setProxy().build();
 			//其余代码不变
+			catch httpconnectionexception 如果发现连接异常。就说明ip不可用。从redis中移出
 		}
 
 		 */

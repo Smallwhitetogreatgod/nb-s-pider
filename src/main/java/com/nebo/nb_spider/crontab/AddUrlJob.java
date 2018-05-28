@@ -9,7 +9,7 @@ import org.quartz.JobExecutionException;
 import com.nebo.nb_spider.util.RedisUtil;
 /**
  * 向redis 添加分类url
- * @author dajiangtai
+ * @author NeboFeng
  *
  */
 public class AddUrlJob implements Job {
@@ -21,5 +21,7 @@ public class AddUrlJob implements Job {
 			redisUtil.add(redisUtil.highkey, url);
 		}
 	}
+
+
 
 }

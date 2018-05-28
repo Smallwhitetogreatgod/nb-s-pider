@@ -1,5 +1,7 @@
 package com.nebo.nb_spider.entity;
 
+import org.apache.solr.client.solrj.beans.Field;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,34 +13,55 @@ import java.util.List;
  */
 public class Page {
 	// 页面内容
+	@Field
 	private String content;
 	// 总播放量
+	@Field
 	private String allnumber;
 	// 每日播放增量
+	@Field
 	private String daynumber;
 	// 评论数
+	@Field
 	private String commentnumber;
 
 	// 收藏数
+	@Field
 	private String collectnumber;
 	// 赞
+	@Field
 	private String supportnumber;
 	// 踩
+	@Field
 	private String againstnumber;
 
 	// 电视剧名称
+	@Field
 	private String tvname;
 
 	// 页面url
+	@Field
 	private String url;
 
 	// 子集数据
 	private String episodenumber;
 	// 电视剧id
+	@Field
 	private String tvId;
 
 	// 电视剧Url 包含列表url 和详情页 url
 	private List<String> urlList = new ArrayList<String>();
+
+
+	//当前在那一页 调试使用
+	private String currentPageNum;
+	public String getCurrentPageNum() {
+		return currentPageNum;
+	}
+
+	public void setCurrentPageNum(String currentPageNum) {
+		this.currentPageNum = currentPageNum;
+	}
 
 	public List<String> getUrlList() {
 		return urlList;

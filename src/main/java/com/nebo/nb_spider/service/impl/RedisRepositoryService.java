@@ -25,12 +25,12 @@ public class RedisRepositoryService implements IRepositoryService {
 		System.out.println(url+"addlowkey==================");
 		redisUtil.add(RedisUtil.lowkey,url);
 	}
- 
+
 	public void addHighLevel(String url) {
-		
+		System.out.println(url+"addHighkey==================");
 		redisUtil.add(RedisUtil.highkey,url);
 
 	}
 
-	
+
 }

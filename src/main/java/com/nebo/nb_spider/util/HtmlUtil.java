@@ -1,7 +1,9 @@
 package com.nebo.nb_spider.util;
 
+import java.io.IOException;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
@@ -56,7 +58,7 @@ public class HtmlUtil {
 				 System.out.println();
 				Pattern numberPattern = Pattern.compile(regex, Pattern.DOTALL);
 				number = RegexUtil.getPageInfoByRegex(node.getText().toString(), numberPattern, 0);
-				//System.out.println("number================="+number);
+
 
 			}
 
@@ -68,26 +70,47 @@ public class HtmlUtil {
 
 	}
 
-	public static String getDescUrl(String detailUrl, String regex) {
-		String descUrl = null;
-		String content = PageDownLoadUtil.getPageContent(detailUrl);
-		HtmlCleaner htmlCleaner = new HtmlCleaner();
-		TagNode rootNode = htmlCleaner.clean(content);
-
-		Object[] evaluateXPath;
+	public static String getDescUrl(String url, String xpath) {
+		String html= null;
 		try {
-			evaluateXPath = rootNode.evaluateXPath(regex);
-			if (evaluateXPath.length > 0) {
-				TagNode desc = (TagNode) evaluateXPath[0];
-				descUrl = desc.getAttributeByName("href");
-
-			}
-		} catch (XPatherException e) {
-			// TODO Auto-generated catch block
+			html = JsUtil.getParseredHtml2(url);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return descUrl;
+		//String content = PageDownLoadUtil.getPageContent(detailUrl);
+		HtmlCleaner htmlCleaner = new HtmlCleaner();
+		TagNode rootNode = htmlCleaner.clean(html);
+		String descUrl =null;
+		Object[] evaluateXPath;
+		try {
+			evaluateXPath = rootNode.evaluateXPath(xpath);
+			if (evaluateXPath.length > 0) {
+				TagNode node = (TagNode) evaluateXPath[0];
+				descUrl =  node.getAttributeByName("href");
+			}
+		} catch (XPatherException e) {
+			e.printStackTrace();
+		}
+
+
+		return StringUtils.isBlank(descUrl)?null:descUrl.replace("//","http://");
 	}
 
+	//*[@id="bpmodule-playpage-righttitle"]/div/h2/a
+	public static void main(String[] args) {
+
+//		try {
+//
+//		//	String result = getDescUrl(html,LoadPropertyUtil.getYOUKU("eachDescUrlRegex"));
+//	//		System.out.println(result);
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		//*[@id="bpmodule-playpage-righttitle"]/div/h2/a
+//        //*[@id="bpmodule-playpage-righttitle"]/div/p/em
+//		//System.out.println(getDescUrl("",LoadPropertyUtil.getYOUKU("eachDescUrlRegex")));
+
+
+	}
 }

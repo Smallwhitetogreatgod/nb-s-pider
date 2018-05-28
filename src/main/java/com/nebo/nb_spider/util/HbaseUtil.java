@@ -36,7 +36,7 @@ import com.nebo.nb_spider.entity.Page;
 public class HbaseUtil {
 
 
-	/**
+	 /**
 	 * HBASE 表名称
 	 */
 	public static final String TABLE_NAME = "tvcount";
@@ -74,8 +74,8 @@ public class HbaseUtil {
 	public HbaseUtil() {
 	    
 		conf = new Configuration();
-		conf.set("hbase.zookeeper.quorum", "192.168.126.121:2181,192.168.126.122:2181,192.168.126.123:2181,192.168.126.124:2181,192.168.126.125:2181");
-	 	// conf.set("hbase.rootdir", "hdfs://192.168.126.121:9000/hbase");
+		conf.set("hbase.zookeeper.quorum", "139.199.172.112:2181,123.207.241.42:2181,118.89.61.19:2181");
+	 	conf.set("hbase.rootdir", "hdfs://139.199.172.112:9000/hbase");
 		try {
 			admin = new HBaseAdmin(conf);
 			
@@ -211,13 +211,17 @@ public class HbaseUtil {
 	 * @throws IOException
 	 */
 	public void put(String tableName, String row, String columnFamily,
-			String column, String data) throws IOException {
+			String column, String data)     {
+		try{
 		HTablePool hTablePool = new HTablePool(conf, 1000);
 		HTableInterface table = hTablePool.getTable(tableName);
 		Put p1 = new Put(Bytes.toBytes(row));
 		p1.add(Bytes.toBytes(columnFamily), Bytes.toBytes(column),
 				Bytes.toBytes(data));
 		table.put(p1);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		System.out.println("put'" + row + "'," + columnFamily + ":" + column
 				+ "','" + data + "'");
 	}

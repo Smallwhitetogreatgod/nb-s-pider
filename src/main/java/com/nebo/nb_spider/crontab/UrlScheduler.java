@@ -7,7 +7,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * 分类url定时抓取job
- * Created by dajiangtai
+ * Created by Nebo
  *
  */
 public class UrlScheduler {
@@ -21,7 +21,7 @@ public class UrlScheduler {
 			//被调度的任务
 			 JobDetail jobDetail = new JobDetail("url-job", Scheduler.DEFAULT_GROUP, AddUrlJob.class);
 			//定时执行任务
-			CronTrigger trigger = new CronTrigger("url-job", Scheduler.DEFAULT_GROUP, "00 11 18 * * ?");
+			CronTrigger trigger = new CronTrigger("url-job", Scheduler.DEFAULT_GROUP, "00 39 19 * * ?");
 			//添加调度任务
 			defaultScheduler.scheduleJob(jobDetail , trigger);
 			
